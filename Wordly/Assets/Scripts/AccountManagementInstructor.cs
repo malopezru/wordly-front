@@ -17,19 +17,10 @@ public class AccountManagementInstructor: AccountManagementController
     [SerializeField] Button ContinueButton;
     [SerializeField] TMP_InputField AboutMeInput;
 
-    [Header("Experiencia laboral")]
+    [Header("Job Experience")]
     [SerializeField] TMP_InputField EmpresaInput;
     [SerializeField] TMP_InputField PosicionInput;
     [SerializeField] TMP_InputField DuracionInput;
-    
-
-
-    void Start()
-    {
-
-        //ContinueButton.onClick.AddListener(() => SetPressedButton(ContinueButton, StringInArray(selectedLanguages, "French"), "French"));
-        
-    }
 
     public void SaveDecriptionInfo()
     {
@@ -41,17 +32,17 @@ public class AccountManagementInstructor: AccountManagementController
     public void SaveExpInfo()
     {
 
-        string empresa = this.EmpresaInput.text;
-        string posicion = this.PosicionInput.text;
-        string duracion = this.DuracionInput.text;
+        string company = this.EmpresaInput.text;
+        string position = this.PosicionInput.text;
+        string duration = this.DuracionInput.text;
 
-        if (string.IsNullOrEmpty(empresa) || string.IsNullOrEmpty(posicion) || string.IsNullOrEmpty(duracion))
+        if (string.IsNullOrEmpty(company) || string.IsNullOrEmpty(position) || string.IsNullOrEmpty(duration))
         {
-            Debug.Log("Please Fill all fields");
+            popUp.SetPopUpMessage("Por favor llene todos los campos", true);
         }
         else
         {
-            Debug.Log(empresa + " : " + posicion + " : " + duracion);
+            Debug.Log(company + " : " + position + " : " + duration);
         }
     }
 }
