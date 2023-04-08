@@ -4183,6 +4183,82 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 294393921}
   m_CullTransparentMesh: 1
+--- !u!1 &295867353
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 295867354}
+  - component: {fileID: 295867356}
+  - component: {fileID: 295867355}
+  m_Layer: 5
+  m_Name: SelectedButtonBackground
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &295867354
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295867353}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.00008, y: 1.00008, z: 1.00008}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1523844006}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.08742936, y: 0.7349824}
+  m_AnchorMax: {x: 0.89439535, y: 0.8822571}
+  m_AnchoredPosition: {x: 0, y: 0.000015258789}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &295867355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295867353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 0391292ef8ad3f9469173045c6257684, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &295867356
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295867353}
+  m_CullTransparentMesh: 1
 --- !u!1 &300290921
 GameObject:
   m_ObjectHideFlags: 0
@@ -4820,7 +4896,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 452953397}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AccountManagementController, Assembly-CSharp
         m_MethodName: MoveButtonBackground
         m_Mode: 2
@@ -6413,30 +6489,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 452953395}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f322a4294e253c4fb37f3059597731e, type: 3}
+  m_Script: {fileID: 11500000, guid: fa7cefb8f0b45ce479ca181e10b7f753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nameInput: {fileID: 1000150743}
   lastNameInput: {fileID: 171848693}
   birthdayInput: {fileID: 1675174907}
-  noSelectedOptionText: {fileID: 691731052}
+  noSelectedOptionText: {fileID: 0}
   savePersonalInfo: {fileID: 990335338}
   frenchButton: {fileID: 1847024364}
   englishButton: {fileID: 286178958}
   spanishButton: {fileID: 342028156}
   japaneseButton: {fileID: 1284631453}
   germanButton: {fileID: 1121880506}
-  buttonNormal: {r: 1, g: 1, b: 1, a: 0.25490198}
-  buttonPressed: {r: 0.4117647, g: 0.6509804, b: 1, a: 0.25490198}
-  cardNumberInput: {fileID: 0}
-  expirationDateInput: {fileID: 0}
-  cvvInput: {fileID: 0}
+  buttonNormal: {r: 1, g: 1, b: 1, a: 0}
+  buttonPressed: {r: 0, g: 0.465055, b: 1, a: 0}
+  cardNumberInput: {fileID: 1687915008}
+  expirationDateInput: {fileID: 495214137}
+  cvvInput: {fileID: 210078212}
   personalInfoButton: {fileID: 1328071125}
   languagesInfoButton: {fileID: 1552461479}
-  languagesLevelButton: {fileID: 334515819}
   paymentMethodsButton: {fileID: 501663035}
   SelectedButtonBackground: {fileID: 1874958207}
-  selectedLanguages: []
+  languagesLevelButton: {fileID: 334515819}
 --- !u!1 &453800413
 GameObject:
   m_ObjectHideFlags: 0
@@ -7491,7 +7566,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 452953397}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AccountManagementController, Assembly-CSharp
         m_MethodName: MoveButtonBackground
         m_Mode: 2
@@ -13932,7 +14007,7 @@ RectTransform:
   m_Children:
   - {fileID: 1566513628}
   m_Father: {fileID: 1523844006}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.123165764, y: 0.15301026}
   m_AnchorMax: {x: 0.85763454, y: 0.29371256}
@@ -13996,7 +14071,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -15764,7 +15839,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 452953397}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AccountManagementController, Assembly-CSharp
         m_MethodName: SavePersonalInfo
         m_Mode: 1
@@ -16765,7 +16840,7 @@ RectTransform:
   m_Children:
   - {fileID: 1820892231}
   m_Father: {fileID: 1523844006}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.123165764, y: 0.75622946}
   m_AnchorMax: {x: 0.85763454, y: 0.86300004}
@@ -16841,7 +16916,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -19596,7 +19671,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.24542983, y: 0.8970574}
-  m_AnchoredPosition: {x: -50, y: -199.99998}
+  m_AnchoredPosition: {x: -50, y: -200}
   m_SizeDelta: {x: 100, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1223802863
@@ -20010,7 +20085,7 @@ RectTransform:
   m_Children:
   - {fileID: 1584257464}
   m_Father: {fileID: 1523844006}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.123165764, y: 0.42160314}
   m_AnchorMax: {x: 0.85763454, y: 0.5326089}
@@ -20074,7 +20149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -21661,7 +21736,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1523844006}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.9868154, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -21866,7 +21941,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 452953397}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AccountManagementController, Assembly-CSharp
         m_MethodName: MoveButtonBackground
         m_Mode: 2
@@ -22120,7 +22195,7 @@ RectTransform:
   m_Children:
   - {fileID: 1150554015}
   m_Father: {fileID: 1523844006}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.123165764, y: 0.63370836}
   m_AnchorMax: {x: 0.85763454, y: 0.75622946}
@@ -22184,7 +22259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -24612,30 +24687,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 1502359262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f322a4294e253c4fb37f3059597731e, type: 3}
+  m_Script: {fileID: 11500000, guid: 28a801201ed21ae45879d2a74c194ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameInput: {fileID: 0}
-  lastNameInput: {fileID: 0}
-  birthdayInput: {fileID: 0}
+  nameInput: {fileID: 1098464501}
+  lastNameInput: {fileID: 922643259}
+  birthdayInput: {fileID: 1137130629}
   noSelectedOptionText: {fileID: 0}
-  savePersonalInfo: {fileID: 0}
-  frenchButton: {fileID: 0}
-  englishButton: {fileID: 0}
-  spanishButton: {fileID: 0}
-  japaneseButton: {fileID: 0}
-  germanButton: {fileID: 0}
-  buttonNormal: {r: 0, g: 0, b: 0, a: 0}
-  buttonPressed: {r: 0, g: 0, b: 0, a: 0}
-  cardNumberInput: {fileID: 0}
-  expirationDateInput: {fileID: 0}
-  cvvInput: {fileID: 0}
-  personalInfoButton: {fileID: 0}
-  languagesInfoButton: {fileID: 0}
-  languagesLevelButton: {fileID: 0}
-  paymentMethodsButton: {fileID: 0}
-  SelectedButtonBackground: {fileID: 0}
-  selectedLanguages: []
+  savePersonalInfo: {fileID: 827345159}
+  frenchButton: {fileID: 1171337524}
+  englishButton: {fileID: 1543484757}
+  spanishButton: {fileID: 1832402755}
+  japaneseButton: {fileID: 732072806}
+  germanButton: {fileID: 1798346144}
+  buttonNormal: {r: 1, g: 1, b: 1, a: 0}
+  buttonPressed: {r: 0, g: 0.45992422, b: 1, a: 0}
+  cardNumberInput: {fileID: 332839942}
+  expirationDateInput: {fileID: 2103925683}
+  cvvInput: {fileID: 1463723840}
+  personalInfoButton: {fileID: 1045955345}
+  languagesInfoButton: {fileID: 1341771365}
+  paymentMethodsButton: {fileID: 830778552}
+  SelectedButtonBackground: {fileID: 295867353}
+  AboutMeButton: {fileID: 1954857178}
+  JobExperienceButton: {fileID: 1251491794}
+  ScheduleButton: {fileID: 2069464776}
 --- !u!1 &1510931625
 GameObject:
   m_ObjectHideFlags: 0
@@ -24997,6 +25073,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 295867354}
   - {fileID: 1045955344}
   - {fileID: 1341771364}
   - {fileID: 1954857177}
@@ -25096,7 +25173,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 452953397}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AccountManagementController, Assembly-CSharp
         m_MethodName: SaveCardInfo
         m_Mode: 1
@@ -26085,7 +26162,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 452953397}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AccountManagementController, Assembly-CSharp
         m_MethodName: MoveButtonBackground
         m_Mode: 2
@@ -33530,7 +33607,7 @@ RectTransform:
   m_Children:
   - {fileID: 1130103236}
   m_Father: {fileID: 1523844006}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.123165764, y: 0.5326089}
   m_AnchorMax: {x: 0.85763454, y: 0.63370836}
@@ -33594,7 +33671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -35748,7 +35825,7 @@ RectTransform:
   m_Children:
   - {fileID: 1276689067}
   m_Father: {fileID: 1523844006}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.123165764, y: 0.29371256}
   m_AnchorMax: {x: 0.85763454, y: 0.42160314}
@@ -35812,7 +35889,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -36071,7 +36148,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 452953397}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AccountManagementController, Assembly-CSharp
         m_MethodName: HandleSex
         m_Mode: 0

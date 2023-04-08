@@ -33,12 +33,12 @@ public class AccountManagementController : MonoBehaviour
     [Header("Management Selection")]
     [SerializeField] Button personalInfoButton;
     [SerializeField] Button languagesInfoButton;
-    [SerializeField] Button languagesLevelButton;
+    
     [SerializeField] Button paymentMethodsButton;
     [SerializeField] GameObject SelectedButtonBackground;
 
     private string sex = "Masculino";
-    public List<string> selectedLanguages = null;
+    private List<string> selectedLanguages = null;
 
     public TMP_InputField Name { get => nameInput; set => nameInput = value; }
     public TMP_InputField LastName { get => lastNameInput; set => lastNameInput = value; }
