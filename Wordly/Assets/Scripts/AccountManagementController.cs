@@ -38,7 +38,7 @@ public class AccountManagementController : MonoBehaviour
     [SerializeField] GameObject SelectedButtonBackground;
 
     private string sex = "Masculino";
-    private List<string> selectedLanguages = null;
+    public List<string> selectedLanguages = null;
 
     public TMP_InputField Name { get => nameInput; set => nameInput = value; }
     public TMP_InputField LastName { get => lastNameInput; set => lastNameInput = value; }
@@ -108,6 +108,10 @@ public class AccountManagementController : MonoBehaviour
         else if (value == 1)
         {
             sex = "Femenino";
+        }
+        else
+        {
+            sex = "Otro";
         }
     }
 
