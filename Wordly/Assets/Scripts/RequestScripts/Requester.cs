@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 
 public class Requester : MonoBehaviour
 {
-    public Dictionary<string, string> headers;
+    public Dictionary<string, string> headers = new Dictionary<string, string>();
 
     public OperationResult<T> GetOperation<T>(string URL, Dictionary<string, string> headers = null) where T : class, new()
     {
@@ -89,6 +89,33 @@ public class Requester : MonoBehaviour
         operation.IsReady = true;
     }
 
+    //----------------------  POST RESQUEST ----------------------
+
+    public OperationResult<T> PostOperation<T>(string URL, Dictionary<string, string> dataPost, Dictionary<string, string> headers = null) where T : class, new()
+    {
+        var operation = new OperationResult<T>();
+        StartCoroutine(Post(URL, dataPost, operation, headers));
+        return operation;
+    }
+
+    IEnumerator Post<T>(string URL, Dictionary<string, string> dataPost, OperationResult<T> operation, Dictionary<string, string> newHeaders) where T : class, new()
+    {
+        WWWForm form = new WWWForm();
+
+        foreach (KeyValuePair<string, string> key in dataPost)
+        {
+            form.AddField(key.Key, key.Value);
+        }
+        form.headers["Content-Type"] = "application/json";
+        UnityWebRequest request = UnityWebRequest.Post(URL, form);
+        if (newHeaders != null)
+        {
+            SetHeadersToRequest(request, newHeaders);
+        }
+        yield return request.SendWebRequest();
+        ProcessRequestResult(request, operation);
+    }
+
     void SetHeadersToRequest(UnityWebRequest request, Dictionary<string, string> newHeaders)
     {
         if (newHeaders != null)
@@ -110,5 +137,32 @@ public class Requester : MonoBehaviour
                 headers.Add(header.Key, header.Value);
             }
         }
+    }
+
+    void ResolveOperation(string data, OperationResult operation)
+    {
+        try
+        {
+            operation.ResolveData(data);
+        }
+        catch (Exception error)
+        {
+            operation.ErrorMessage = error.Message;
+            Debug.LogError($"Error: Resolving an HTTP Response {operation.ErrorMessage}");
+        }
+    }
+
+    void ProcessRequestResult(UnityWebRequest request, OperationResult operation)
+    {
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            ResolveOperation(request.downloadHandler.text, operation);
+        }
+        else
+        {
+            operation.ErrorMessage = ErrorHandle(request);
+            Debug.LogError(operation.ErrorMessage);
+        }
+        operation.IsReady = true;
     }
 }

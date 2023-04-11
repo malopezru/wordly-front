@@ -12,15 +12,18 @@ public class SignInController : MonoBehaviour
     [SerializeField] Button signInButton;
     [SerializeField] GameObject studentManagementView;
     [SerializeField] GameObject instructorManagementView;
+    Requester requester;
 
     private string role = "Estudiante";
 
     public TMP_InputField User { get => userNameInput; set => userNameInput = value; }
     public TMP_InputField Password { get => passwordInput; set => passwordInput = value; }
     public TMP_InputField ConfirmPassword { get => confirmPasswordInput; set => confirmPasswordInput = value; }
+    public Requester Requester { get => requester; set => requester = value; }
 
     private void Start()
     {
+        Requester = GameObject.Find("App").GetComponent<Requester>();
         Password.contentType = TMP_InputField.ContentType.Password;
         ConfirmPassword.contentType = TMP_InputField.ContentType.Password;
     }
@@ -48,18 +51,18 @@ public class SignInController : MonoBehaviour
 
     public void SignIn()
     {
-        string user = this.User.text;
+        string email = this.User.text;
         string password = this.Password.text;
         string confirmPassword = this.ConfirmPassword.text;
-        bool isEmailValid = CheckEmailFormat(user);
+        bool isEmailValid = CheckEmailFormat(email);
 
-        if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))
         {
             Debug.Log("Please Fill all fields");
         }
         else if (!isEmailValid) 
         {
-            Debug.Log("Error in email format : " + user);
+            Debug.Log("Error in email format : " + email);
         }
         else if (password != confirmPassword)
         {
@@ -67,11 +70,10 @@ public class SignInController : MonoBehaviour
         }
         else
         {
-            Debug.Log(user + " : " + password + " : " + confirmPassword + " : " + role);
+            Debug.Log(email + " : " + password + " : " + confirmPassword + " : " + role);
             if (role == "Estudiante")
             {
-                this.gameObject.SetActive(false);
-                studentManagementView.SetActive(true);
+                StartCoroutine(RegisterUser(email, password));
             }
             else if (role == "Instructor")
             {
@@ -81,4 +83,38 @@ public class SignInController : MonoBehaviour
         }
     }
 
+
+    public IEnumerator RegisterUser(string email, string password)
+    {
+        Dictionary<string, string> requestBody = new Dictionary<string, string>();
+
+        int index = email.IndexOf("@");
+        string user = email.Substring(0, index);
+
+        requestBody.Add("username", user);
+        requestBody.Add("password", password);
+        requestBody.Add("email", email);
+        requestBody.Add("role", role);
+        requestBody.Add("name", "nombre");
+        requestBody.Add("date_of_birth", "2000-01-01");
+        requestBody.Add("genre", "other");
+
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+
+        headers.Add("Access", "application/json");
+
+        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("http://127.0.0.1:8000/api/user/register/", requestBody, headers);
+
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
+            PlayerPrefs.SetString("Authorization", "Bearer " + operation.Data.token.access);
+            this.gameObject.SetActive(false);
+            studentManagementView.SetActive(true);
+        }
+    }
 }

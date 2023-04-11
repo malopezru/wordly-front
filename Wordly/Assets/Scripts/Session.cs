@@ -25,34 +25,27 @@ public class Session : MonoBehaviour
     {
         string user = this.User.text;
         string password = this.Password.text;
-        bool isEmailValid = CheckEmailFormat(user);
         
-        if (!isEmailValid) 
-        {
-            Debug.Log("Error in email format");
-        }
-        else
-        {
-            StartCoroutine(GetUser("https://gorest.co.in/public/v2/users/464"));
-            Debug.Log(user +  "   " + password );
-        }
+        StartCoroutine(LoginUser(user, password));
+        Debug.Log(user +  "   " + password );
 
     }
 
-    public bool CheckEmailFormat(string value)
+    public IEnumerator LoginUser(string user, string password)
     {
-        if (value.Contains("@hotmail.") || value.Contains("@gmail."))
+
+        Dictionary<string, string> requestBody = new Dictionary<string, string>();
+        
+        string caseSensitiveUser = "";
+        if (!string.IsNullOrEmpty(user))
         {
-            return true;
+            caseSensitiveUser = $"{user[0].ToString().ToLower()}{user.Substring(1)}";
         }
-        return false;
-    }
 
-    public IEnumerator GetUser(string url)
-    {
+        requestBody.Add("username", caseSensitiveUser);
+        requestBody.Add("password", password);
 
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        OperationResult<User> operation = requester.GetOperation<User>(url, headers);
+        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("http://127.0.0.1:8000/api/user/login/", requestBody);
 
         while (!operation.IsReady)
         {
@@ -61,7 +54,11 @@ public class Session : MonoBehaviour
 
         if (!operation.HasError)
         {
-            Debug.Log("hola");
+            PlayerPrefs.SetString("Authorization", "Bearer " + operation.Data.token.access);
+        }
+        else
+        {
+
         }
     }
 }
