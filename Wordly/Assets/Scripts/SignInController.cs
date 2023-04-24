@@ -15,6 +15,7 @@ public class SignInController : MonoBehaviour
     Requester requester;
 
     private string role = "Estudiante";
+    private string endpoint = "api/auth/register_student";
 
     public TMP_InputField User { get => userNameInput; set => userNameInput = value; }
     public TMP_InputField Password { get => passwordInput; set => passwordInput = value; }
@@ -33,16 +34,18 @@ public class SignInController : MonoBehaviour
         if (value == 0)
         {
             role = "Estudiante";
+            endpoint = "api/auth/register_student";
         }
         else if (value == 1)
         {
             role = "Instructor";
+            endpoint = "api/auth/register_tutor";
         }
     }
 
     public bool CheckEmailFormat(string value)
     {
-        if (value.Contains("@hotmail.") || value.Contains("@gmail."))
+        if (value.Contains("@hotmail.com") || value.Contains("@gmail.com") || value.Contains("@unal.edu.co"))
         {
             return true;
         }
@@ -92,18 +95,18 @@ public class SignInController : MonoBehaviour
         string user = email.Substring(0, index);
 
         requestBody.Add("username", user);
-        requestBody.Add("password", password);
         requestBody.Add("email", email);
+        requestBody.Add("name", "usuario");
+        requestBody.Add("last_name", "usuario");
+        requestBody.Add("gender", "O");
+        requestBody.Add("birthday", "2000-01-01");
+        requestBody.Add("password", password);
         requestBody.Add("role", role);
-        requestBody.Add("name", "nombre");
-        requestBody.Add("date_of_birth", "2000-01-01");
-        requestBody.Add("genre", "other");
+        requestBody.Add("language", "english");
+        requestBody.Add("level", "a1");
+        requestBody.Add("payment", "0000000000000000");
 
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-
-        headers.Add("Access", "application/json");
-
-        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("http://127.0.0.1:8000/api/user/register/", requestBody, headers);
+        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("http://localhost:8000/api/auth/register_student", requestBody);
 
         while (!operation.IsReady)
         {
@@ -112,7 +115,7 @@ public class SignInController : MonoBehaviour
 
         if (!operation.HasError)
         {
-            PlayerPrefs.SetString("Authorization", "Bearer " + operation.Data.token.access);
+            PlayerPrefs.SetString("Authorization", "Token " + operation.Data.token);
             this.gameObject.SetActive(false);
             studentManagementView.SetActive(true);
         }

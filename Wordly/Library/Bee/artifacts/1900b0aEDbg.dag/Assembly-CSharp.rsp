@@ -105,6 +105,7 @@
 -define:ENABLE_UNITY_COLLECTIONS_CHECKS
 -define:ENABLE_BURST_AOT
 -define:UNITY_TEAM_LICENSE
+-define:UNITY_PRO_LICENSE
 -define:ENABLE_CUSTOM_RENDER_TEXTURE
 -define:ENABLE_DIRECTOR
 -define:ENABLE_LOCALIZATION
@@ -347,6 +348,7 @@
 "Assets/Scripts/AccountManagementController.cs"
 "Assets/Scripts/AccountManagementInstructor.cs"
 "Assets/Scripts/AccountManagementStudent.cs"
+"Assets/Scripts/MainMenuLanguage.cs"
 "Assets/Scripts/MessagePopUp.cs"
 "Assets/Scripts/Models/StudentUser.cs"
 "Assets/Scripts/Models/User.cs"

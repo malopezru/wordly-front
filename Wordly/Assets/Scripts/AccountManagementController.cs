@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,8 +40,11 @@ public class AccountManagementController : MonoBehaviour
     [Header("Other")]
     [SerializeField] public MessagePopUp popUp;
 
-    private string sex = "Masculino";
+    private string sex = "M";
+    private string user_type = null;
     public List<string> selectedLanguages = null;
+    private Dictionary<string, string> requestBody = new Dictionary<string, string>();
+    Requester requester;
 
     public TMP_InputField Name { get => nameInput; set => nameInput = value; }
     public TMP_InputField LastName { get => lastNameInput; set => lastNameInput = value; }
@@ -48,6 +52,7 @@ public class AccountManagementController : MonoBehaviour
     public TMP_InputField CardNumber { get => cardNumberInput; set => cardNumberInput = value; }
     public TMP_InputField ExpirationDate { get => expirationDateInput; set => expirationDateInput = value; }
     public TMP_InputField CVV { get => cvvInput; set => cvvInput = value; }
+    public Requester Requester { get => requester; set => requester = value; }
 
     private void Awake()
     {
@@ -56,6 +61,40 @@ public class AccountManagementController : MonoBehaviour
         spanishButton.onClick.AddListener(() => SetPressedButton(spanishButton, StringInArray(selectedLanguages, "Spanish"), "Spanish"));
         japaneseButton.onClick.AddListener(() => SetPressedButton(japaneseButton, StringInArray(selectedLanguages, "Japanese"), "Japanese"));
         germanButton.onClick.AddListener(() => SetPressedButton(germanButton, StringInArray(selectedLanguages, "German"), "German"));
+    }
+
+    private void Start()
+    {
+        Requester = GameObject.Find("App").GetComponent<Requester>();
+        StartCoroutine(GetUserData());
+    }
+
+    public IEnumerator GetUserData()
+    {
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+        OperationResult<User> operation = Requester.GetOperation<User>("http://localhost:8000/api/profile/user_data", header);
+
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
+            FillBodyFields(operation.Data);
+        }
+    }
+
+    public void FillBodyFields(User userData)
+    {
+        requestBody.Add("name", userData.name);
+        requestBody.Add("email", userData.email);
+        requestBody.Add("last_name", userData.last_name);
+        requestBody.Add("gender", userData.gender);
+        requestBody.Add("language", "english");
+        requestBody.Add("level", "a1");
+        user_type = userData.user_type;
     }
 
     public void SetPressedButton(Button button, bool isPressed, string languagePressed)
@@ -104,26 +143,27 @@ public class AccountManagementController : MonoBehaviour
     {
         if (value == 0)
         {
-            sex = "Masculino";
+            sex = "M";
         }
         else if (value == 1)
         {
-            sex = "Femenino";
+            sex = "F";
         }
         else if (value == 2) 
         {
-            sex = "Otro";
+            sex = "O";
         }
     }
 
     public bool IsDateTime(string value)
     {
         DateTime dateTime;
-        bool isDateTime = false;
 
-        isDateTime = DateTime.TryParse(value, out dateTime);
-
-        return isDateTime;
+        if (DateTime.TryParse(value, out dateTime) && value[4] == '-' && value[7] == '-')
+        {
+            return true;
+        }
+        return false;
     }
 
     public void SavePersonalInfo()
@@ -142,8 +182,37 @@ public class AccountManagementController : MonoBehaviour
         }
         else
         {
+            StartCoroutine(PostPersonalInfo(name, lastName, birthday, sex));
+        }
+    }
+
+
+    public IEnumerator PostPersonalInfo(string name, string lastName, string birthday, string gender)
+    {
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+        string endpoint = "update_data_student";
+
+        if (user_type != "Student")
+        {
+            endpoint = "update_data_tutor";
+        }
+
+        requestBody["name"] = name;
+        requestBody["last_name"] = lastName;
+        requestBody["birthday"] = birthday;
+        requestBody["gender"] = gender;
+
+        OperationResult<User> operation = Requester.PostOperation<User>($"http://localhost:8000/api/profile/{endpoint}", requestBody, header);
+
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
             popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
-            Debug.Log(name + " : " + lastName + " : " + birthday + " : " + sex);
         }
     }
 
