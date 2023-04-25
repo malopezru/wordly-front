@@ -42,10 +42,10 @@ public class Session : MonoBehaviour
             caseSensitiveUser = $"{user[0].ToString().ToLower()}{user.Substring(1)}";
         }
 
-        requestBody.Add("username", caseSensitiveUser);
+        requestBody.Add("email", caseSensitiveUser);
         requestBody.Add("password", password);
 
-        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("http://127.0.0.1:8000/api/user/login/", requestBody);
+        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("http://localhost:8000/api/auth/login", requestBody);
 
         while (!operation.IsReady)
         {
@@ -54,7 +54,7 @@ public class Session : MonoBehaviour
 
         if (!operation.HasError)
         {
-            PlayerPrefs.SetString("Authorization", "Bearer " + operation.Data.token.access);
+            PlayerPrefs.SetString("Authorization", "Token " + operation.Data.token);
         }
         else
         {
