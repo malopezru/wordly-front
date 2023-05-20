@@ -105,6 +105,8 @@ public class SignInController : MonoBehaviour
         requestBody.Add("language", "english");
         requestBody.Add("level", "a1");
         requestBody.Add("payment", "0000000000000000");
+        requestBody.Add("ccv", "123");
+        requestBody.Add("expire_date", "01/26");
 
         OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("http://localhost:8000/api/auth/register_student", requestBody);
 
@@ -115,7 +117,7 @@ public class SignInController : MonoBehaviour
 
         if (!operation.HasError)
         {
-            PlayerPrefs.SetString("Authorization", "Token " + operation.Data.token);
+            //PlayerPrefs.SetString("Authorization", "Token " + operation.Data.token);
             this.gameObject.SetActive(false);
             studentManagementView.SetActive(true);
         }

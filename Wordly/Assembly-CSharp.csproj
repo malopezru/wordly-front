@@ -102,6 +102,13 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Scripts\AccountManagementStudent.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
+    <Compile Include="Assets\Scripts\GetTutors.cs" />
+    <Compile Include="Assets\Scripts\Models\TutorInfo.cs" />
+    <Compile Include="Assets\Scripts\Models\TutorPrefab.cs" />
+    <Compile Include="Assets\Scripts\TutorInfoController.cs" />
+    <Compile Include="Assets\Scripts\BookClassController.cs" />
+    <Compile Include="Assets\Scripts\GetScheduleStudent.cs" />
+    <Compile Include="Assets\Scripts\StudentSchedulePrefab.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
