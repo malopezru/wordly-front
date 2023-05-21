@@ -4,31 +4,26 @@ using UnityEngine;
 
 public class User : MonoBehaviour
 {
-    public string email { get; set; }
-    public bool is_staff { get; set; }
-    public bool is_active { get; set; }
-    public string date_joined { get; set; }
     public string username { get; set; }
+    public string email { get; set; }
     public string name { get; set; }
     public string last_name { get; set; }
     public string gender { get; set; }
-    public string user_type { get; set; }
     public string birthday { get; set; }
-    public string language { get; set; }
+    public string user_type { get; set; }
+    public int payment { get; set; }
+    public string expire_date { get; set; }
+    public int ccv { get; set; }
+    public Language language { get; set; }
     public string level { get; set; }
 }
 
-public class PaymentMethods
+public class Language
 {
-    public string cardNumber;
-    public string expirationDate;
-    public string cvv;
-}
-
-public class Languages 
-{
-    public string language;
+    public int id;
+    public string name;
     public string level;
+    public int user;
 }
 
 [Serializable]

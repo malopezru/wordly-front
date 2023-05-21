@@ -8,6 +8,7 @@ public class MainMenuLanguage : MonoBehaviour
     [SerializeField] GameObject opaqueBackground;
     [SerializeField] GameObject selectionWindow;
     [SerializeField] GameObject triangle;
+    [SerializeField] ForumController forumController;
 
     public void ToggleSelectionWindow()
     {
@@ -15,5 +16,10 @@ public class MainMenuLanguage : MonoBehaviour
         opaqueBackground.SetActive(isSelectingLanguage);
         selectionWindow.SetActive(isSelectingLanguage);
         triangle.SetActive(isSelectingLanguage);
+    }
+
+    public void SetForumRole(string role)
+    {
+        forumController.currentRole = role;
     }
 }

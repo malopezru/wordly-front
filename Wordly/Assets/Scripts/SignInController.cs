@@ -99,14 +99,11 @@ public class SignInController : MonoBehaviour
         requestBody.Add("name", "usuario");
         requestBody.Add("last_name", "usuario");
         requestBody.Add("gender", "O");
-        requestBody.Add("birthday", "2000-01-01");
+        requestBody.Add("birthday", "2001-01-01");
         requestBody.Add("password", password);
-        requestBody.Add("role", role);
-        requestBody.Add("language", "english");
-        requestBody.Add("level", "a1");
         requestBody.Add("payment", "0000000000000000");
         requestBody.Add("ccv", "123");
-        requestBody.Add("expire_date", "01/26");
+        requestBody.Add("expire_date", "2000-01-01");
 
         OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("http://localhost:8000/api/auth/register_student", requestBody);
 
@@ -117,9 +114,13 @@ public class SignInController : MonoBehaviour
 
         if (!operation.HasError)
         {
-            //PlayerPrefs.SetString("Authorization", "Token " + operation.Data.token);
+            PlayerPrefs.SetString("Authorization", "Token " + operation.Data.token);
             this.gameObject.SetActive(false);
             studentManagementView.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError(operation.ErrorMessage);
         }
     }
 }
