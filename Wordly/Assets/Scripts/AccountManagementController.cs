@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using TMPro;
 using Unity.VisualScripting;
@@ -26,6 +27,8 @@ public class AccountManagementController : MonoBehaviour
     [SerializeField] Button germanButton;
     [SerializeField] Color buttonNormal;
     [SerializeField] Color buttonPressed;
+    [SerializeField] LanguageLevel languageLevelPrefab;
+    [SerializeField] Transform languageLevelContent;
 
     [Header("Payment Method")]
     [SerializeField] TMP_InputField cardNumberInput;
@@ -43,6 +46,8 @@ public class AccountManagementController : MonoBehaviour
 
     private string sex = "M";
     private string user_type = null;
+    private string selectedLevel = null;
+    private List<Language> languageList = new List<Language>();
     public List<string> selectedLanguages = null;
     private Dictionary<string, string> requestBody = new Dictionary<string, string>();
     Requester requester;
@@ -249,12 +254,105 @@ public class AccountManagementController : MonoBehaviour
         }
     }
 
-    public void SaveCardInfo()
+    public void ShowSelectedLanguages()
+    {
+        StartCoroutine(GetSelectedLanguages());
+    }
+
+    public IEnumerator GetSelectedLanguages()
     {
 
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+
+        OperationResult<List<Language>> operation = Requester.GetOperation<List<Language>>($"http://localhost:8000/api/my-languages/", header);
+
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
+            foreach (Language language in operation.Data)
+            {
+                LanguageLevel newLanguagePrefab = Instantiate(languageLevelPrefab, languageLevelContent);
+                if (language.name == "english")
+                {
+                    newLanguagePrefab.languageFlag.sprite = englishButton.transform.GetChild(1).GetComponent<Image>().sprite;
+                }
+                else if (language.name == "french")
+                {
+                    newLanguagePrefab.languageFlag.sprite = frenchButton.transform.GetChild(1).GetComponent<Image>().sprite;
+                }
+                else if (language.name == "german")
+                {
+                    newLanguagePrefab.languageFlag.sprite = germanButton.transform.GetChild(1).GetComponent<Image>().sprite;
+                }
+                else if (language.name == "japanese")
+                {
+                    newLanguagePrefab.languageFlag.sprite = japaneseButton.transform.GetChild(1).GetComponent<Image>().sprite;
+                }
+                else if (language.name == "spanish")
+                {
+                    newLanguagePrefab.languageFlag.sprite = spanishButton.transform.GetChild(1).GetComponent<Image>().sprite;
+                }
+                newLanguagePrefab.currentLanguageId = language.id;
+                newLanguagePrefab.currentLanguageName = language.name;
+            }
+        }
+    }
+
+    public void SaveLanguagesLevels()
+    {
+        for (var i = languageLevelContent.transform.childCount - 1; i >= 0; i--)
+        {
+            Dictionary<string, string> newLanguage = new Dictionary<string, string>();
+            newLanguage.Add("level", languageLevelContent.transform.GetChild(i).GetComponent<LanguageLevel>().GetCurrentLanguageLevel());
+            newLanguage.Add("name", languageLevelContent.transform.GetChild(i).GetComponent<LanguageLevel>().currentLanguageName);
+            int languageId = languageLevelContent.transform.GetChild(i).GetComponent<LanguageLevel>().currentLanguageId;
+
+            StartCoroutine(PutLanguageLevel(newLanguage, languageId));
+        }
+    }
+
+    public IEnumerator PutLanguageLevel(Dictionary<string, string> body, int id)
+    {
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+
+        OperationResult<Language> operation = Requester.PostOperation<Language>($"http://127.0.0.1:8000/api/languages/language/{id}/update", body, header);
+
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
+            popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+        }
+    }
+
+
+    public void CleanLanguageLevelObjects()
+    {
+        for (var i = languageLevelContent.transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(languageLevelContent.transform.GetChild(i).gameObject);
+        }
+    }
+
+    public void SaveCardInfo()
+    {
         string cardNumber = this.CardNumber.text;
         string expirationDate = this.ExpirationDate.text;
         string cvv = this.CVV.text;
+
+        Dictionary<string, string> body = new Dictionary<string, string>();
+        body.Add("number", cardNumber);
+        body.Add("expire_date", expirationDate + "-01");
+        body.Add("ccv", cvv);
 
         if (string.IsNullOrEmpty(cardNumber) || string.IsNullOrEmpty(expirationDate) || string.IsNullOrEmpty(cvv))
         {
@@ -266,8 +364,25 @@ public class AccountManagementController : MonoBehaviour
         }
         else
         {
+            StartCoroutine(PostCardInfo(body));
+        }
+    }
+
+    public IEnumerator PostCardInfo(Dictionary<string, string> body)
+    {
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+
+        OperationResult<Language> operation = Requester.PostOperation<Language>($"http://127.0.0.1:8000/api/create-payment", body, header);
+
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
             popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
-            Debug.Log(cardNumber + " : " + expirationDate + " : " + cvv);
         }
     }
 
@@ -283,12 +398,12 @@ public class AccountManagementController : MonoBehaviour
         if (!cvvCheck.IsMatch(cvv)) // <2>check cvv is valid as "999"
             return false;
 
-        var dateParts = expiryDate.Split('/'); //expiry date in from MM/yyyy            
-        if (!monthCheck.IsMatch(dateParts[0]) || !yearCheck.IsMatch(dateParts[1])) // <3 - 6>
+        var dateParts = expiryDate.Split('-'); //expiry date in from MM-yyyy            
+        if (!monthCheck.IsMatch(dateParts[1]) || !yearCheck.IsMatch(dateParts[0])) // <3 - 6>
             return false; // ^ check date format is valid as "MM/yyyy"
 
-        var year = int.Parse(dateParts[1]);
-        var month = int.Parse(dateParts[0]);
+        var year = int.Parse(dateParts[0]);
+        var month = int.Parse(dateParts[1]);
         var lastDateOfExpiryMonth = DateTime.DaysInMonth(year, month); //get actual expiry date
         var cardExpiry = new DateTime(year, month, lastDateOfExpiryMonth, 23, 59, 59);
 

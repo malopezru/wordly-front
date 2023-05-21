@@ -6,6 +6,9 @@ using System.Text;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+using System.IO;
 
 public class Requester : MonoBehaviour
 {
@@ -114,6 +117,48 @@ public class Requester : MonoBehaviour
         }
         yield return request.SendWebRequest();
         ProcessRequestResult(request, operation);
+    }
+
+    //----------------------  PUT RESQUEST ----------------------
+    
+    public OperationResult<T> PutOperation<T>(string URL, Dictionary<string, string> dataPost, Dictionary<string,string> headers) where T : class, new()
+    {
+        var operation = new OperationResult<T>();
+        StartCoroutine(PutRequest(URL, dataPost, operation, headers));
+        return operation;
+    }
+    private IEnumerator PutRequest<T>(string url, Dictionary<string, string> dataPost, OperationResult<T> operation, Dictionary<string, string> headers) where T : class, new()
+    {
+        Debug.Log("putRequest data " + dataPost);
+        var binFormatter = new BinaryFormatter();
+        var mStream = new MemoryStream();
+        binFormatter.Serialize(mStream, dataPost);
+        byte[] bytes = mStream.ToArray();
+
+        UnityWebRequest www = UnityWebRequest.Put(url, bytes);
+
+        foreach (var item in headers)
+        {
+            www.SetRequestHeader(item.Key,item.Value);
+        }
+
+        www.SetRequestHeader("Content-Type", "application/json");
+
+        yield return www.SendWebRequest();
+
+        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            operation.ErrorMessage = www.error;
+            Debug.LogError(url);
+            Debug.LogError(www.error);
+        }
+        else
+        {
+            operation.ResolveData(www.downloadHandler.text);
+        }
+        operation.IsReady = true;
+        www.Dispose();
+        www = null;
     }
 
     void SetHeadersToRequest(UnityWebRequest request, Dictionary<string, string> newHeaders)

@@ -11,36 +11,43 @@ public class GetTutors : MonoBehaviour
     public GameObject SearchTutorView;
     public GameObject TutorInfoView;
     public TutorInfoController tutorInfoController;
+    List<TutorInfo> tutorsList = new List<TutorInfo>();
+    Requester requester;
+
+    public Requester Requester { get => requester; set => requester = value; }
 
     void Start()
     {
-        //get function
-        List<TutorInfo> tutorsList = new List<TutorInfo>();
+        Requester = GameObject.Find("App").GetComponent<Requester>();
+    }
 
-        TutorInfo tutor1 = new TutorInfo();
-        TutorInfo tutor2 = new TutorInfo();
+    public void ShowTutors()
+    {
+        StartCoroutine(GetAllTutors());
+    }
 
-        tutor1.name = "Juan";
-        tutor1.last_name = "Ortega";
-        tutor1.days = new List<string>();
-        tutor1.days.Add("Lunes");
-        tutor1.days.Add("Viernes");
-        tutor1.cost = "10000";
-        tutor1.rating = 5;
+    public IEnumerator GetAllTutors()
+    {
+        if (!Requester)
+        {
+            Requester = GameObject.Find("App").GetComponent<Requester>();
+        }
 
-        tutor2.name = "Mateo";
-        tutor2.last_name = "López";
-        tutor2.days = new List<string>();
-        tutor2.days.Add("Lunes");
-        tutor2.days.Add("Jueves");
-        tutor2.days.Add("Sábado");
-        tutor2.cost = "15000";
-        tutor2.rating = 4;
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        tutorsList.Add(tutor1);
-        tutorsList.Add(tutor2);
+        OperationResult<List<TutorInfo>> operation = Requester.GetOperation<List<TutorInfo>>($"http://127.0.0.1:8000/api/search/tutors/all", header);
 
-        CreateTutors(tutorsList);
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
+            tutorsList = operation.Data;
+            CreateTutors(tutorsList);
+        }
     }
 
     public void CreateTutors(List<TutorInfo> tutorsList)
@@ -49,10 +56,10 @@ public class GetTutors : MonoBehaviour
         {
             TutorPrefab newTutor = Instantiate(tutorPrefab, tutorTransform);
             newTutor.tutorName.text = $"{tutor.name} {tutor.last_name}";
-            newTutor.cost.text = tutor.cost;
+            //newTutor.cost.text = tutor.cost;
+            newTutor.cost.text = "$10000";
             //newTutor.rating.text = tutor.rating.ToString();
             SetTutorWorkingDays(newTutor, tutor.days);
-            newTutor.GetComponent<Button>().onClick.AddListener(() => Debug.Log("clicked"));
             newTutor.GetComponent<Button>().onClick.AddListener(() => SearchTutorView.SetActive(false));
             newTutor.GetComponent<Button>().onClick.AddListener(() => TutorInfoView.SetActive(true));
             newTutor.GetComponent<Button>().onClick.AddListener(() => tutorInfoController.SetTutorInfo(tutor));
