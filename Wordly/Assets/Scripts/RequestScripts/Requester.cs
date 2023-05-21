@@ -26,7 +26,7 @@ public class Requester : MonoBehaviour
 
             if (error != null)
             {
-                return JsonConvert.DeserializeObject<Error>(error).message;
+                return error;
             }
 
             switch (request.result)

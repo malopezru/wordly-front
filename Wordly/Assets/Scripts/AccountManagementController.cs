@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.UI;
@@ -56,11 +57,11 @@ public class AccountManagementController : MonoBehaviour
 
     private void Awake()
     {
-        frenchButton.onClick.AddListener(() => SetPressedButton(frenchButton, StringInArray(selectedLanguages, "French"), "French"));
-        englishButton.onClick.AddListener(() => SetPressedButton(englishButton, StringInArray(selectedLanguages, "English"), "English"));
-        spanishButton.onClick.AddListener(() => SetPressedButton(spanishButton, StringInArray(selectedLanguages, "Spanish"), "Spanish"));
-        japaneseButton.onClick.AddListener(() => SetPressedButton(japaneseButton, StringInArray(selectedLanguages, "Japanese"), "Japanese"));
-        germanButton.onClick.AddListener(() => SetPressedButton(germanButton, StringInArray(selectedLanguages, "German"), "German"));
+        frenchButton.onClick.AddListener(() => SetPressedButton(frenchButton, StringInArray(selectedLanguages, "french"), "french"));
+        englishButton.onClick.AddListener(() => SetPressedButton(englishButton, StringInArray(selectedLanguages, "english"), "english"));
+        spanishButton.onClick.AddListener(() => SetPressedButton(spanishButton, StringInArray(selectedLanguages, "spanish"), "spanish"));
+        japaneseButton.onClick.AddListener(() => SetPressedButton(japaneseButton, StringInArray(selectedLanguages, "japanese"), "japanese"));
+        germanButton.onClick.AddListener(() => SetPressedButton(germanButton, StringInArray(selectedLanguages, "german"), "german"));
     }
 
     private void Start()
@@ -92,8 +93,6 @@ public class AccountManagementController : MonoBehaviour
         requestBody.Add("email", userData.email);
         requestBody.Add("last_name", userData.last_name);
         requestBody.Add("gender", userData.gender);
-        requestBody.Add("language", "english");
-        requestBody.Add("level", "a1");
         user_type = userData.user_type;
     }
 
@@ -109,10 +108,6 @@ public class AccountManagementController : MonoBehaviour
         {
             button.image.color = buttonPressed;
             selectedLanguages.Add(languagePressed);
-        }
-        foreach (var x in selectedLanguages)
-        {
-            Debug.Log(x.ToString());
         }
     }
 
@@ -202,8 +197,46 @@ public class AccountManagementController : MonoBehaviour
         requestBody["last_name"] = lastName;
         requestBody["birthday"] = birthday;
         requestBody["gender"] = gender;
+        requestBody["user_type"] = user_type;
 
         OperationResult<User> operation = Requester.PostOperation<User>($"http://localhost:8000/api/profile/{endpoint}", requestBody, header);
+
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
+            popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+        }
+    }
+
+    public void SaveLanguagesInfo()
+    {
+        if (selectedLanguages.Count > 0)
+        {
+            foreach (string language in selectedLanguages)
+            {
+                Dictionary<string, string> languagesBody = new Dictionary<string, string>(){
+                    { "name", language },
+                    { "level", "a1" }
+                };
+                StartCoroutine(PostLanguagesInfo(languagesBody));
+            }
+        }
+        else
+        {
+            popUp.SetPopUpMessage("Seleccione al menos un idioma", false);
+        }
+    }
+
+    IEnumerator PostLanguagesInfo(Dictionary<string, string> body)
+    {
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+
+        OperationResult<Language> operation = Requester.PostOperation<Language>($"http://localhost:8000/api/languages/create-language", body, header);
 
         while (!operation.IsReady)
         {
