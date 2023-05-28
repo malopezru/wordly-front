@@ -8,6 +8,9 @@ public class Session : MonoBehaviour
 {
     [SerializeField] TMP_InputField userNameInput;
     [SerializeField] TMP_InputField passwordInput;
+    [SerializeField] GameObject studentHomeView;
+    [SerializeField] GameObject tutorHomeView;
+    [SerializeField] public MessagePopUp popUp;
     Requester requester;
     public Button loginButton;
 
@@ -55,10 +58,20 @@ public class Session : MonoBehaviour
         if (!operation.HasError)
         {
             PlayerPrefs.SetString("Authorization", "Token " + operation.Data.token);
+            if (operation.Data.user.user_type == "Student")
+            {
+                this.gameObject.SetActive(false);
+                studentHomeView.gameObject.SetActive(true);
+            }
+            else
+            {
+                this.gameObject.SetActive(false);
+                tutorHomeView.gameObject.SetActive(true);
+            }
         }
         else
         {
-
+            popUp.SetPopUpMessage("Contraseña o Usuario incorrectos", true);
         }
     }
 }

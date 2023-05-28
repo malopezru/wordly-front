@@ -74,15 +74,7 @@ public class SignInController : MonoBehaviour
         else
         {
             Debug.Log(email + " : " + password + " : " + confirmPassword + " : " + role);
-            if (role == "Estudiante")
-            {
-                StartCoroutine(RegisterUser(email, password));
-            }
-            else if (role == "Instructor")
-            {
-                this.gameObject.SetActive(false);
-                instructorManagementView.SetActive(true);
-            }
+            StartCoroutine(RegisterUser(email, password));
         }
     }
 
@@ -93,6 +85,7 @@ public class SignInController : MonoBehaviour
 
         int index = email.IndexOf("@");
         string user = email.Substring(0, index);
+        string endpoint = "";
 
         requestBody.Add("username", user);
         requestBody.Add("email", email);
@@ -105,7 +98,17 @@ public class SignInController : MonoBehaviour
         requestBody.Add("ccv", "123");
         requestBody.Add("expire_date", "2000-01-01");
 
-        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("http://localhost:8000/api/auth/register_student", requestBody);
+        if (role == "Instructor")
+        {
+            requestBody.Add("description", "a");
+            endpoint = "/api/auth/register_tutor";
+        }
+        else
+        {
+            endpoint = "/api/auth/register_student";
+        }
+
+        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>($"http://localhost:8000{endpoint}", requestBody);
 
         while (!operation.IsReady)
         {
@@ -113,10 +116,19 @@ public class SignInController : MonoBehaviour
         }
 
         if (!operation.HasError)
-        {
+            {
             PlayerPrefs.SetString("Authorization", "Token " + operation.Data.token);
-            this.gameObject.SetActive(false);
-            studentManagementView.SetActive(true);
+
+            if (role == "Estudiante")
+            {
+                this.gameObject.SetActive(false);
+                studentManagementView.SetActive(true);
+            }
+            else if (role == "Instructor")
+            {
+                this.gameObject.SetActive(false);
+                instructorManagementView.SetActive(true);
+            }
         }
         else
         {

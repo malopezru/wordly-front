@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using TMPro;
+using Unity.Jobs;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
@@ -34,6 +35,8 @@ public class AccountManagementController : MonoBehaviour
     [SerializeField] TMP_InputField cardNumberInput;
     [SerializeField] TMP_InputField expirationDateInput;
     [SerializeField] TMP_InputField cvvInput;
+    [SerializeField] GameObject cardInfoPrefab;
+    [SerializeField] Transform cardInfoContent;
 
     [Header("Management Selection")]
     [SerializeField] Button personalInfoButton;
@@ -49,7 +52,7 @@ public class AccountManagementController : MonoBehaviour
     private string selectedLevel = null;
     private List<Language> languageList = new List<Language>();
     public List<string> selectedLanguages = null;
-    private Dictionary<string, string> requestBody = new Dictionary<string, string>();
+    public Dictionary<string, string> requestBody = new Dictionary<string, string>();
     Requester requester;
 
     public TMP_InputField Name { get => nameInput; set => nameInput = value; }
@@ -343,6 +346,65 @@ public class AccountManagementController : MonoBehaviour
         }
     }
 
+    public void ShowUserPaymentMethods()
+    {
+        for (var i = cardInfoContent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(cardInfoContent.GetChild(i).gameObject);
+        }
+        StartCoroutine(GetUserPaymentMethods());
+    }
+
+    public IEnumerator GetUserPaymentMethods()
+    {
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+
+        OperationResult<List<PaymentMethod>> operation = Requester.GetOperation<List<PaymentMethod>>($"http://127.0.0.1:8000/api/create-payment", header);
+
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
+            popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+            foreach (PaymentMethod payment in operation.Data)
+            {
+                GameObject newJob = Instantiate(cardInfoPrefab, cardInfoContent);
+                newJob.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "XXXXXXXXXXXX" + payment.number.ToString().Substring(payment.number.ToString().Length - 4);
+                newJob.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = payment.expire_date;
+                newJob.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() => deleteCardInfo(payment));
+            }
+        }
+    }
+
+    public void deleteCardInfo(PaymentMethod payment)
+    {
+        StartCoroutine(DeleteSpecificCard(payment));
+    }
+
+    public IEnumerator DeleteSpecificCard(PaymentMethod payment)
+    {
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        Dictionary<string, string> body = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+
+        OperationResult<Message> operation = Requester.PostOperation<Message>($"http://localhost:8000/api/payment/{payment.id}/delete", body, header);
+
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
+            popUp.SetPopUpMessage("Información eliminada", false);
+            ShowUserPaymentMethods();
+        }
+    }
+
     public void SaveCardInfo()
     {
         string cardNumber = this.CardNumber.text;
@@ -373,7 +435,7 @@ public class AccountManagementController : MonoBehaviour
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<Language> operation = Requester.PostOperation<Language>($"http://127.0.0.1:8000/api/create-payment", body, header);
+        OperationResult<PaymentMethod> operation = Requester.PostOperation<PaymentMethod>($"http://127.0.0.1:8000/api/create-payment", body, header);
 
         while (!operation.IsReady)
         {
@@ -383,6 +445,10 @@ public class AccountManagementController : MonoBehaviour
         if (!operation.HasError)
         {
             popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+        }
+        else
+        {
+            popUp.SetPopUpMessage(operation.ErrorMessage, true);
         }
     }
 
