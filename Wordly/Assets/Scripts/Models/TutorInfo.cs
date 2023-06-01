@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TutorInfo : MonoBehaviour
 {
+    public int id{ get; set; }
     public string name { get; set; }
     public string last_name { get; set; }
     public string description { get; set; }

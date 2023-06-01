@@ -74,4 +74,13 @@ public class Session : MonoBehaviour
             popUp.SetPopUpMessage("Contraseña o Usuario incorrectos", true);
         }
     }
+
+    public void Logout(GameObject currentView)
+    {
+        currentView.SetActive(false);
+        PlayerPrefs.DeleteAll();
+        this.gameObject.SetActive(true);
+        this.User.text = "";
+        this.Password.text = "";
+    }
 }

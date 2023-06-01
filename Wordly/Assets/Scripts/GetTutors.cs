@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,9 +40,11 @@ public class GetTutors : MonoBehaviour
         }
 
         Dictionary<string, string> header = new Dictionary<string, string>();
+        Dictionary<string, string> body = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+        body.Add("name", PlayerPrefs.GetString("CurrentLanguage"));
 
-        OperationResult<List<TutorInfo>> operation = Requester.GetOperation<List<TutorInfo>>($"http://127.0.0.1:8000/api/search/tutors/all", header);
+        OperationResult<List<TutorInfo>> operation = Requester.PostOperation<List<TutorInfo>>($"http://127.0.0.1:8000/api/search/tutors/language", body, header);
 
         while (!operation.IsReady)
         {
@@ -63,10 +66,11 @@ public class GetTutors : MonoBehaviour
             newTutor.tutorName.text = $"{tutor.name} {tutor.last_name}";
             newTutor.cost.text = tutor.cost;
             newTutor.cost.text = "$10000";
+            string[] daysTutor = {"Lunes", "Martes", "Miércoles"};
             //newTutor.rating.text = tutor.rating.ToString();
             if (tutor.days != null)
             {
-                SetTutorWorkingDays(newTutor, tutor.days);
+                SetTutorWorkingDays(newTutor, daysTutor);
             }
             newTutor.GetComponent<Button>().onClick.AddListener(() => SearchTutorView.SetActive(false));
             newTutor.GetComponent<Button>().onClick.AddListener(() => TutorInfoView.SetActive(true));
@@ -74,7 +78,7 @@ public class GetTutors : MonoBehaviour
         }
     }
 
-    public void SetTutorWorkingDays(TutorPrefab tutor, List<string> days)
+    public void SetTutorWorkingDays(TutorPrefab tutor, string[] days)
     {
         if (days.Contains("Lunes"))
         {

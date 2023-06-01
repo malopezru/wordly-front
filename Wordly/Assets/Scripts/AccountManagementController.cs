@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using TMPro;
 using Unity.Jobs;
 using Unity.VisualScripting;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -101,6 +100,7 @@ public class AccountManagementController : MonoBehaviour
         requestBody.Add("email", userData.email);
         requestBody.Add("last_name", userData.last_name);
         requestBody.Add("gender", userData.gender);
+        requestBody.Add("description", "a");
         user_type = userData.user_type;
     }
 
@@ -360,7 +360,7 @@ public class AccountManagementController : MonoBehaviour
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<List<PaymentMethod>> operation = Requester.GetOperation<List<PaymentMethod>>($"http://127.0.0.1:8000/api/create-payment", header);
+        OperationResult<List<PaymentMethod>> operation = Requester.GetOperation<List<PaymentMethod>>($"http://127.0.0.1:8000/api/my-payments", header);
 
         while (!operation.IsReady)
         {
@@ -369,7 +369,6 @@ public class AccountManagementController : MonoBehaviour
 
         if (!operation.HasError)
         {
-            popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
             foreach (PaymentMethod payment in operation.Data)
             {
                 GameObject newJob = Instantiate(cardInfoPrefab, cardInfoContent);
@@ -445,6 +444,7 @@ public class AccountManagementController : MonoBehaviour
         if (!operation.HasError)
         {
             popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+            ShowUserPaymentMethods();
         }
         else
         {

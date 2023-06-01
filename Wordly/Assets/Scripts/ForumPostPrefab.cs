@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class ForumPostPrefab : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI posterName;
-    [SerializeField] TextMeshProUGUI postTitle;
-    [SerializeField] TextMeshProUGUI postMessage;
+    [SerializeField] public TextMeshProUGUI posterName;
+    [SerializeField] public TextMeshProUGUI postTitle;
+    [SerializeField] public TextMeshProUGUI postMessage;
+    [SerializeField] public TextMeshProUGUI postDate;
 }

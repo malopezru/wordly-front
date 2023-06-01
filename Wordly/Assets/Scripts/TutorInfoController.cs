@@ -10,21 +10,43 @@ public class TutorInfoController : MonoBehaviour
     public TextMeshProUGUI tutorDescription;
     public GameObject selectedButtonBackground;
     public BookClassController bookClassController;
+    public GameObject bookClassView;
+    Requester requester;
 
     private string currentTutorCost;
+    public Requester Requester { get => requester; set => requester = value; }
 
     public void SetTutorInfo(TutorInfo tutor)
     {
-        TutorInfo newTutor = GetSpecificTutor(tutor);
-        name.text = $"{tutor.name} {tutor.last_name}";
-        tutorDescription.text = newTutor.description;
+        if (!Requester)
+        {
+            Requester = GameObject.Find("App").GetComponent<Requester>();
+        }
+
+        StartCoroutine(GetSpecificTutor(tutor));
         currentTutorCost = tutor.cost;
     }
 
-    public TutorInfo GetSpecificTutor(TutorInfo tutor)
+    public IEnumerator GetSpecificTutor(TutorInfo tutor)
     {
-        tutor.description = "Tutor test";
-        return tutor;
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        Dictionary<string, string> body = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+        body.Add("id", tutor.id.ToString());
+
+        OperationResult<List<TutorInfo>> operation = Requester.PostOperation<List<TutorInfo>>($"http://127.0.0.1:8000/api/search/tutor", body, header);
+
+        while (!operation.IsReady)
+        {
+            yield return null;
+        }
+
+        if (!operation.HasError)
+        {
+            name.text = $"{operation.Data[0].name} {operation.Data[0].last_name}";
+            tutorDescription.text = operation.Data[0].description;
+            bookClassController.SetTutorId(tutor.id);
+        }
     }
 
     public void MoveButtonBackground(GameObject button)
@@ -38,6 +60,8 @@ public class TutorInfoController : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(currentTutorCost))
         {
+            this.gameObject.SetActive(false);
+            bookClassView.SetActive(true);
             bookClassController.SetTutorCost(currentTutorCost);
         }
     }

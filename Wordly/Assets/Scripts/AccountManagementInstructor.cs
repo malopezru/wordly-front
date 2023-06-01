@@ -21,11 +21,23 @@ public class AccountManagementInstructor: AccountManagementController
     [SerializeField] GameObject jobExperiencePrefab;
     [SerializeField] Transform jobExperienceContent;
 
+    [Header("Availability")]
+    [SerializeField] GameObject hourButtonsPrefab;
+    [SerializeField] Transform dayAvailabilityContent;
+
     public void SaveDecriptionInfo()
     {
         string description = this.AboutMeInput.text;
         requestBody["description"] = description;
         StartCoroutine(PostTutorDescription(requestBody));
+    }
+
+    public void GenerateAvailabilityView()
+    {
+        for (var i = 0; i < 24;  i++)
+        {
+            GameObject hourButton = Instantiate(hourButtonsPrefab, dayAvailabilityContent);
+        }
     }
 
     public void ShowExperience()
@@ -138,7 +150,7 @@ public class AccountManagementInstructor: AccountManagementController
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<Language> operation = Requester.PostOperation<Language>($"http://localhost:8000/api/profile/update_data_tutor", body, header);
+        OperationResult<User> operation = Requester.PostOperation<User>($"http://localhost:8000/api/profile/update_data_tutor", body, header);
 
         while (!operation.IsReady)
         {
@@ -148,6 +160,10 @@ public class AccountManagementInstructor: AccountManagementController
         if (!operation.HasError)
         {
             popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+        }
+        else
+        {
+            popUp.SetPopUpMessage(operation.ErrorMessage, true);
         }
     }
 }
