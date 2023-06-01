@@ -17,6 +17,7 @@ public class BookClassController : MonoBehaviour
     int end = -1;
     public int tutorCost;
     private int currentTutorId;
+    private string currentTutorCost;
 
     public TMP_InputField ClassDay { get => classDay; set => classDay = value; }
     public TMP_InputField BeginHour { get => beginHour; set => beginHour = value; }
@@ -56,7 +57,7 @@ public class BookClassController : MonoBehaviour
         }
         else
         {
-            totalCost.text = "$";
+            totalCost.text = "";
         }
 
 

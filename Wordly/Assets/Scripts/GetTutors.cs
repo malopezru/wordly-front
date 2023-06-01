@@ -13,6 +13,8 @@ public class GetTutors : MonoBehaviour
     public GameObject SearchTutorView;
     public GameObject TutorInfoView;
     public TutorInfoController tutorInfoController;
+    public MainMenuLanguage mainMenuController;
+    public Button currentLanguageButton;
     List<TutorInfo> tutorsList = new List<TutorInfo>();
     Requester requester;
 
@@ -25,6 +27,7 @@ public class GetTutors : MonoBehaviour
             Destroy(tutorTransform.GetChild(i).gameObject);
         }
         StartCoroutine(GetAllTutors());
+        mainMenuController.SetButtonFlag(currentLanguageButton, PlayerPrefs.GetString("CurrentLanguage"));
     }
 
     void Start()
@@ -64,13 +67,11 @@ public class GetTutors : MonoBehaviour
         {
             TutorPrefab newTutor = Instantiate(tutorPrefab, tutorTransform);
             newTutor.tutorName.text = $"{tutor.name} {tutor.last_name}";
-            newTutor.cost.text = tutor.cost;
-            newTutor.cost.text = "$10000";
-            string[] daysTutor = {"Lunes", "Martes", "Miércoles"};
+            newTutor.cost.text = "$" + tutor.cost;
             //newTutor.rating.text = tutor.rating.ToString();
-            if (tutor.days != null)
+            if (tutor.availability != null)
             {
-                SetTutorWorkingDays(newTutor, daysTutor);
+                SetTutorWorkingDays(newTutor, tutor.availability);
             }
             newTutor.GetComponent<Button>().onClick.AddListener(() => SearchTutorView.SetActive(false));
             newTutor.GetComponent<Button>().onClick.AddListener(() => TutorInfoView.SetActive(true));
@@ -78,35 +79,38 @@ public class GetTutors : MonoBehaviour
         }
     }
 
-    public void SetTutorWorkingDays(TutorPrefab tutor, string[] days)
+    public void SetTutorWorkingDays(TutorPrefab tutor, List<AvailabilityModel> availability)
     {
-        if (days.Contains("Lunes"))
+        foreach (AvailabilityModel availabilityDay in availability)
         {
-            tutor.monday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
-        }
-        if (days.Contains("Martes"))
-        {
-            tutor.tuesday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
-        }
-        if (days.Contains("Miercoles"))
-        {
-            tutor.wednesday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
-        }
-        if (days.Contains("Jueves"))
-        {
-            tutor.thursday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
-        }
-        if (days.Contains("Viernes"))
-        {
-            tutor.friday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
-        }
-        if (days.Contains("Sábado"))
-        {
-            tutor.saturday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
-        }
-        if (days.Contains("Domingo"))
-        {
-            tutor.sunday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
+            if (availabilityDay.day_of_week.Contains("1"))
+            {
+                tutor.monday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
+            }
+            if (availabilityDay.day_of_week.Contains("2"))
+            {
+                tutor.tuesday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
+            }
+            if (availabilityDay.day_of_week.Contains("3"))
+            {
+                tutor.wednesday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
+            }
+            if (availabilityDay.day_of_week.Contains("4"))
+            {
+                tutor.thursday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
+            }
+            if (availabilityDay.day_of_week.Contains("5"))
+            {
+                tutor.friday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
+            }
+            if (availabilityDay.day_of_week.Contains("6"))
+            {
+                tutor.saturday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
+            }
+            if (availabilityDay.day_of_week.Contains("7"))
+            {
+                tutor.sunday.GetComponent<TextMeshProUGUI>().color = activeDayColor;
+            }
         }
     }
 }

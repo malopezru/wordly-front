@@ -73,7 +73,6 @@ public class SignInController : MonoBehaviour
         }
         else
         {
-            Debug.Log(email + " : " + password + " : " + confirmPassword + " : " + role);
             StartCoroutine(RegisterUser(email, password));
         }
     }
@@ -101,14 +100,14 @@ public class SignInController : MonoBehaviour
         if (role == "Instructor")
         {
             requestBody.Add("description", "a");
-            endpoint = "/api/auth/register_tutor";
+            endpoint = "api/auth/register_tutor";
         }
         else
         {
-            endpoint = "/api/auth/register_student";
+            endpoint = "api/auth/register_student";
         }
 
-        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>($"https://wordly-zgzi.onrender.com{endpoint}", requestBody);
+        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>($"http://localhost:8000/{endpoint}", requestBody);
 
         while (!operation.IsReady)
         {
@@ -116,7 +115,7 @@ public class SignInController : MonoBehaviour
         }
 
         if (!operation.HasError)
-            {
+        {
             PlayerPrefs.SetString("Authorization", "Token " + operation.Data.token);
 
             if (role == "Estudiante")

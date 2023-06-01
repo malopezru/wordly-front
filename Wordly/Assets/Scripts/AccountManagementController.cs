@@ -47,7 +47,7 @@ public class AccountManagementController : MonoBehaviour
     [SerializeField] public MessagePopUp popUp;
 
     private string sex = "M";
-    private string user_type = null;
+    private string user_type = "Student";
     private string selectedLevel = null;
     private List<Language> languageList = new List<Language>();
     public List<string> selectedLanguages = null;

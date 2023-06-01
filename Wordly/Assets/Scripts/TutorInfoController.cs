@@ -10,7 +10,8 @@ public class TutorInfoController : MonoBehaviour
     public TextMeshProUGUI tutorDescription;
     public GameObject selectedButtonBackground;
     public BookClassController bookClassController;
-    public GameObject bookClassView;
+    public MainMenuLanguage mainMenuController;
+    public Button currentLanguageButton;
     Requester requester;
 
     private string currentTutorCost;
@@ -22,7 +23,7 @@ public class TutorInfoController : MonoBehaviour
         {
             Requester = GameObject.Find("App").GetComponent<Requester>();
         }
-
+        mainMenuController.SetButtonFlag(currentLanguageButton, PlayerPrefs.GetString("CurrentLanguage"));
         StartCoroutine(GetSpecificTutor(tutor));
         currentTutorCost = tutor.cost;
     }
@@ -46,6 +47,7 @@ public class TutorInfoController : MonoBehaviour
             name.text = $"{operation.Data[0].name} {operation.Data[0].last_name}";
             tutorDescription.text = operation.Data[0].description;
             bookClassController.SetTutorId(tutor.id);
+            bookClassController.SetTutorCost(tutor.cost);
         }
     }
 
@@ -61,7 +63,7 @@ public class TutorInfoController : MonoBehaviour
         if (!string.IsNullOrEmpty(currentTutorCost))
         {
             this.gameObject.SetActive(false);
-            bookClassView.SetActive(true);
+            bookClassController.gameObject.SetActive(true);
             bookClassController.SetTutorCost(currentTutorCost);
         }
     }

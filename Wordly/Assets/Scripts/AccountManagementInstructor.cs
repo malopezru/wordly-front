@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,6 +14,7 @@ public class AccountManagementInstructor: AccountManagementController
     [Header ("About Me")] 
     [SerializeField] Button ContinueButton;
     [SerializeField] TMP_InputField AboutMeInput;
+    [SerializeField] TMP_InputField CostInput;
 
     [Header("Job Experience")]
     [SerializeField] TMP_InputField EmpresaInput;
@@ -22,21 +24,89 @@ public class AccountManagementInstructor: AccountManagementController
     [SerializeField] Transform jobExperienceContent;
 
     [Header("Availability")]
-    [SerializeField] GameObject hourButtonsPrefab;
+    [SerializeField] DayHoursPrefab hourButtonsPrefab;
     [SerializeField] Transform dayAvailabilityContent;
 
     public void SaveDecriptionInfo()
     {
         string description = this.AboutMeInput.text;
+        string cost = this.CostInput.text;
         requestBody["description"] = description;
+        requestBody["cost"] = cost;
         StartCoroutine(PostTutorDescription(requestBody));
     }
 
     public void GenerateAvailabilityView()
     {
-        for (var i = 0; i < 24;  i++)
+        for (var i = dayAvailabilityContent.childCount - 1; i >= 1; i--)
         {
-            GameObject hourButton = Instantiate(hourButtonsPrefab, dayAvailabilityContent);
+            Destroy(dayAvailabilityContent.GetChild(i).gameObject);
+        }
+
+        for (var i = 0; i < 7;  i++)
+        {
+            DayHoursPrefab dayButtons = Instantiate(hourButtonsPrefab, dayAvailabilityContent);
+            dayButtons.day = (i + 1).ToString();
+        }
+    }
+
+    public void SendSelectedAvailability()
+    {
+        List<Dictionary<string, string>> availabilityBody = new List<Dictionary<string, string>>();
+        for (var i = 1; i < dayAvailabilityContent.childCount; i++)
+        {
+            Debug.Log("DAY: " + dayAvailabilityContent.GetChild(i).GetComponent<DayHoursPrefab>().day);
+            for (var j = 1; j < dayAvailabilityContent.GetChild(i).childCount; j++)
+            {
+                if (dayAvailabilityContent.GetChild(i).transform.GetChild(j).GetComponent<DayHoursButtonPrefab>().isSelected)
+                {
+                    Dictionary<string, string> currentSchedule = new Dictionary<string, string>();
+                    currentSchedule.Add("day_of_week", i.ToString());
+                    int start = Int32.Parse(dayAvailabilityContent.GetChild(i).transform.GetChild(j).name);
+
+                    if (start < 10)
+                    {
+                        currentSchedule.Add("start_time", "0" + dayAvailabilityContent.GetChild(i).transform.GetChild(j).name + ":00");
+                    }
+                    else
+                    {
+                        currentSchedule.Add("start_time", dayAvailabilityContent.GetChild(i).transform.GetChild(j).name + ":00");
+                    }
+
+                    int end = start + 1;
+                    if (end < 10)
+                    {
+                        currentSchedule.Add("end_time", "0" + end.ToString() + ":00");
+                    }
+                    else
+                    {
+                        currentSchedule.Add("end_time", end.ToString() + ":00");
+                    }
+                    availabilityBody.Add(currentSchedule);
+                }
+            }
+        }
+        StartCoroutine(PostTutorSchedule(availabilityBody));
+    }
+
+    public IEnumerator PostTutorSchedule(List<Dictionary<string, string>> body)
+    {
+        Dictionary<string, string> header = new Dictionary<string, string>();
+        header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
+
+        foreach(Dictionary<string, string> schedule in body)
+        {
+            OperationResult<AvailabilityModel> operation = Requester.PostOperation<AvailabilityModel> ($"http://localhost:8000/api/time-av/create", schedule, header);
+
+            while (!operation.IsReady)
+            {
+                yield return null;
+            }
+
+            if (!operation.HasError)
+            {
+                popUp.SetPopUpMessage("Información Guardada Correctamente", false);
+            }
         }
     }
 

@@ -349,6 +349,7 @@
 "Assets/Scripts/AccountManagementInstructor.cs"
 "Assets/Scripts/AccountManagementStudent.cs"
 "Assets/Scripts/BookClassController.cs"
+"Assets/Scripts/DayHoursPrefab.cs"
 "Assets/Scripts/ForumController.cs"
 "Assets/Scripts/ForumPostController.cs"
 "Assets/Scripts/ForumPostPrefab.cs"
