@@ -107,7 +107,7 @@ public class SignInController : MonoBehaviour
             endpoint = "api/auth/register_student";
         }
 
-        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>($"http://localhost:8000/{endpoint}", requestBody);
+        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>($"https://wordly-zgzi.onrender.com/{endpoint}", requestBody);
 
         while (!operation.IsReady)
         {

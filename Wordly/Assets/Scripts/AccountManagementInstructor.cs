@@ -96,7 +96,7 @@ public class AccountManagementInstructor: AccountManagementController
 
         foreach(Dictionary<string, string> schedule in body)
         {
-            OperationResult<AvailabilityModel> operation = Requester.PostOperation<AvailabilityModel> ($"http://localhost:8000/api/time-av/create", schedule, header);
+            OperationResult<AvailabilityModel> operation = Requester.PostOperation<AvailabilityModel> ($"https://wordly-zgzi.onrender.com/api/time-av/create", schedule, header);
 
             while (!operation.IsReady)
             {
@@ -105,7 +105,7 @@ public class AccountManagementInstructor: AccountManagementController
 
             if (!operation.HasError)
             {
-                popUp.SetPopUpMessage("Información Guardada Correctamente", false);
+                popUp.SetPopUpMessage("Informaciï¿½n Guardada Correctamente", false);
             }
         }
     }
@@ -124,7 +124,7 @@ public class AccountManagementInstructor: AccountManagementController
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<List<JobExperience>> operation = Requester.GetOperation<List<JobExperience>>($"http://localhost:8000/api/my-workexp", header);
+        OperationResult<List<JobExperience>> operation = Requester.GetOperation<List<JobExperience>>($"https://wordly-zgzi.onrender.com/api/my-workexp", header);
 
         while (!operation.IsReady)
         {
@@ -138,7 +138,7 @@ public class AccountManagementInstructor: AccountManagementController
                 GameObject newJob = Instantiate(jobExperiencePrefab, jobExperienceContent);
                 newJob.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = job.company;
                 newJob.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = job.position;
-                newJob.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = job.lenght + " años";
+                newJob.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = job.lenght + " aï¿½os";
                 newJob.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(() => deleteJobExperience(job));
             }
         }
@@ -156,7 +156,7 @@ public class AccountManagementInstructor: AccountManagementController
         Dictionary<string, string> body = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<Message> operation = Requester.PostOperation<Message>($"http://localhost:8000/api/workexp/work_exp/{job.id}/delete", body, header);
+        OperationResult<Message> operation = Requester.PostOperation<Message>($"https://wordly-zgzi.onrender.com/api/workexp/work_exp/{job.id}/delete", body, header);
 
         while (!operation.IsReady)
         {
@@ -165,7 +165,7 @@ public class AccountManagementInstructor: AccountManagementController
 
         if (!operation.HasError)
         {
-            popUp.SetPopUpMessage("Información eliminada", false);
+            popUp.SetPopUpMessage("Informaciï¿½n eliminada", false);
             ShowExperience();
         }
     }
@@ -197,7 +197,7 @@ public class AccountManagementInstructor: AccountManagementController
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<JobExperience> operation = Requester.PostOperation<JobExperience>($"http://localhost:8000/api/workexp/create-workexp", body, header);
+        OperationResult<JobExperience> operation = Requester.PostOperation<JobExperience>($"https://wordly-zgzi.onrender.com/api/workexp/create-workexp", body, header);
 
         while (!operation.IsReady)
         {
@@ -206,7 +206,7 @@ public class AccountManagementInstructor: AccountManagementController
 
         if (!operation.HasError)
         {
-            popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+            popUp.SetPopUpMessage("Informaciï¿½n Guardada Exitosamente", false);
             ShowExperience();
         }
         else
@@ -220,7 +220,7 @@ public class AccountManagementInstructor: AccountManagementController
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<User> operation = Requester.PostOperation<User>($"http://localhost:8000/api/profile/update_data_tutor", body, header);
+        OperationResult<User> operation = Requester.PostOperation<User>($"https://wordly-zgzi.onrender.com/api/profile/update_data_tutor", body, header);
 
         while (!operation.IsReady)
         {
@@ -229,7 +229,7 @@ public class AccountManagementInstructor: AccountManagementController
 
         if (!operation.HasError)
         {
-            popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+            popUp.SetPopUpMessage("Informaciï¿½n Guardada Exitosamente", false);
         }
         else
         {

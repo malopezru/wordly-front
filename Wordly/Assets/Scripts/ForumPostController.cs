@@ -66,7 +66,7 @@ public class ForumPostController : MonoBehaviour
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
         body.Add("text", replyText);
 
-        OperationResult<Comment> operation = Requester.PostOperation<Comment>($"http://localhost:8000/api/forum/comment/{postId}/", body, header);
+        OperationResult<Comment> operation = Requester.PostOperation<Comment>($"https://wordly-zgzi.onrender.com/api/forum/comment/{postId}/", body, header);
 
         while (!operation.IsReady)
         {

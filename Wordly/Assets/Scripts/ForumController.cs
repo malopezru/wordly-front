@@ -37,7 +37,7 @@ public class ForumController : MonoBehaviour
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<List<ForumPost>> operation = Requester.GetOperation<List<ForumPost>>($"http://localhost:8000/api/forum/get", header);
+        OperationResult<List<ForumPost>> operation = Requester.GetOperation<List<ForumPost>>($"https://wordly-zgzi.onrender.com/api/forum/get", header);
 
         while (!operation.IsReady)
         {
@@ -73,7 +73,7 @@ public class ForumController : MonoBehaviour
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<ForumPost> operation = Requester.GetOperation<ForumPost>($"http://localhost:8000/api/forum/get/{postId}", header);
+        OperationResult<ForumPost> operation = Requester.GetOperation<ForumPost>($"https://wordly-zgzi.onrender.com/api/forum/get/{postId}", header);
 
         while (!operation.IsReady)
         {

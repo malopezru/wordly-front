@@ -48,7 +48,7 @@ public class Session : MonoBehaviour
         requestBody.Add("email", caseSensitiveUser);
         requestBody.Add("password", password);
 
-        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("http://localhost:8000/api/auth/login", requestBody);
+        OperationResult<UserLogin> operation = requester.PostOperation<UserLogin>("https://wordly-zgzi.onrender.com/api/auth/login", requestBody);
 
         while (!operation.IsReady)
         {
@@ -71,7 +71,7 @@ public class Session : MonoBehaviour
         }
         else
         {
-            popUp.SetPopUpMessage("Contraseña o Usuario incorrectos", true);
+            popUp.SetPopUpMessage("Contraseï¿½a o Usuario incorrectos", true);
         }
     }
 

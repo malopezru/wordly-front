@@ -81,7 +81,7 @@ public class AccountManagementController : MonoBehaviour
     {
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
-        OperationResult<User> operation = Requester.GetOperation<User>("http://localhost:8000/api/profile/user_data", header);
+        OperationResult<User> operation = Requester.GetOperation<User>("https://wordly-zgzi.onrender.com/api/profile/user_data", header);
 
         while (!operation.IsReady)
         {
@@ -181,7 +181,7 @@ public class AccountManagementController : MonoBehaviour
         }
         else if (!IsDateTime(birthday))
         {
-            popUp.SetPopUpMessage("Fecha no válida", true);
+            popUp.SetPopUpMessage("Fecha no vï¿½lida", true);
         }
         else
         {
@@ -207,7 +207,7 @@ public class AccountManagementController : MonoBehaviour
         requestBody["gender"] = gender;
         requestBody["user_type"] = user_type;
 
-        OperationResult<User> operation = Requester.PostOperation<User>($"http://localhost:8000/api/profile/{endpoint}", requestBody, header);
+        OperationResult<User> operation = Requester.PostOperation<User>($"https://wordly-zgzi.onrender.com/api/profile/{endpoint}", requestBody, header);
 
         while (!operation.IsReady)
         {
@@ -216,7 +216,7 @@ public class AccountManagementController : MonoBehaviour
 
         if (!operation.HasError)
         {
-            popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+            popUp.SetPopUpMessage("Informaciï¿½n Guardada Exitosamente", false);
         }
     }
 
@@ -244,7 +244,7 @@ public class AccountManagementController : MonoBehaviour
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<Language> operation = Requester.PostOperation<Language>($"http://localhost:8000/api/languages/create-language", body, header);
+        OperationResult<Language> operation = Requester.PostOperation<Language>($"https://wordly-zgzi.onrender.com/api/languages/create-language", body, header);
 
         while (!operation.IsReady)
         {
@@ -253,7 +253,7 @@ public class AccountManagementController : MonoBehaviour
 
         if (!operation.HasError)
         {
-            popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+            popUp.SetPopUpMessage("Informaciï¿½n Guardada Exitosamente", false);
         }
     }
 
@@ -268,7 +268,7 @@ public class AccountManagementController : MonoBehaviour
         Dictionary<string, string> header = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<List<Language>> operation = Requester.GetOperation<List<Language>>($"http://localhost:8000/api/my-languages/", header);
+        OperationResult<List<Language>> operation = Requester.GetOperation<List<Language>>($"https://wordly-zgzi.onrender.com/api/my-languages/", header);
 
         while (!operation.IsReady)
         {
@@ -333,7 +333,7 @@ public class AccountManagementController : MonoBehaviour
 
         if (!operation.HasError)
         {
-            popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+            popUp.SetPopUpMessage("Informaciï¿½n Guardada Exitosamente", false);
         }
     }
 
@@ -390,7 +390,7 @@ public class AccountManagementController : MonoBehaviour
         Dictionary<string, string> body = new Dictionary<string, string>();
         header.Add("Authorization", PlayerPrefs.GetString("Authorization"));
 
-        OperationResult<Message> operation = Requester.PostOperation<Message>($"http://localhost:8000/api/payment/{payment.id}/delete", body, header);
+        OperationResult<Message> operation = Requester.PostOperation<Message>($"https://wordly-zgzi.onrender.com/api/payment/{payment.id}/delete", body, header);
 
         while (!operation.IsReady)
         {
@@ -399,7 +399,7 @@ public class AccountManagementController : MonoBehaviour
 
         if (!operation.HasError)
         {
-            popUp.SetPopUpMessage("Información eliminada", false);
+            popUp.SetPopUpMessage("Informaciï¿½n eliminada", false);
             ShowUserPaymentMethods();
         }
     }
@@ -421,7 +421,7 @@ public class AccountManagementController : MonoBehaviour
         }
         else if(!IsCreditCardInfoValid(cardNumber, expirationDate, cvv))
         {
-            popUp.SetPopUpMessage("La información de la tarjeta no es válida", true);
+            popUp.SetPopUpMessage("La informaciï¿½n de la tarjeta no es vï¿½lida", true);
         }
         else
         {
@@ -443,7 +443,7 @@ public class AccountManagementController : MonoBehaviour
 
         if (!operation.HasError)
         {
-            popUp.SetPopUpMessage("Información Guardada Exitosamente", false);
+            popUp.SetPopUpMessage("Informaciï¿½n Guardada Exitosamente", false);
             ShowUserPaymentMethods();
         }
         else
