@@ -105,7 +105,6 @@
 -define:ENABLE_UNITY_COLLECTIONS_CHECKS
 -define:ENABLE_BURST_AOT
 -define:UNITY_TEAM_LICENSE
--define:UNITY_PRO_LICENSE
 -define:ENABLE_CUSTOM_RENDER_TEXTURE
 -define:ENABLE_DIRECTOR
 -define:ENABLE_LOCALIZATION
@@ -321,12 +320,8 @@
 -r:"C:/Program Files/Unity/Hub/Editor/2021.3.18f1/Editor/Data/NetStandard/compat/2.1.0/shims/netstandard/System.Xml.XPath.XDocument.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.3.18f1/Editor/Data/NetStandard/Extensions/2.0.0/System.Runtime.InteropServices.WindowsRuntime.dll"
 -r:"C:/Program Files/Unity/Hub/Editor/2021.3.18f1/Editor/Data/NetStandard/ref/2.1.0/netstandard.dll"
--r:"C:/Program Files/Unity/Hub/Editor/2021.3.18f1/Editor/Data/PlaybackEngines/AndroidPlayer/Unity.Android.Gradle.dll"
--r:"C:/Program Files/Unity/Hub/Editor/2021.3.18f1/Editor/Data/PlaybackEngines/AndroidPlayer/Unity.Android.Types.dll"
--r:"C:/Program Files/Unity/Hub/Editor/2021.3.18f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll"
--r:"C:/Program Files/Unity/Hub/Editor/2021.3.18f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll"
--r:"C:/wordly-front/Wordly/Library/PackageCache/com.unity.nuget.newtonsoft-json@3.1.0/Runtime/Newtonsoft.Json.dll"
--r:"C:/wordly-front/Wordly/Library/PackageCache/com.unity.visualscripting@1.8.0/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
+-r:"C:/Users/User/Documents/GitHub/wordly-front/Wordly/Library/PackageCache/com.unity.nuget.newtonsoft-json@3.1.0/Runtime/Newtonsoft.Json.dll"
+-r:"C:/Users/User/Documents/GitHub/wordly-front/Wordly/Library/PackageCache/com.unity.visualscripting@1.8.0/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.PlasticSCM.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.Rider.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.TextMeshPro.Editor.ref.dll"
@@ -349,6 +344,8 @@
 "Assets/Scripts/AccountManagementInstructor.cs"
 "Assets/Scripts/AccountManagementStudent.cs"
 "Assets/Scripts/BookClassController.cs"
+"Assets/Scripts/CreatePostController.cs"
+"Assets/Scripts/DayHoursButtonPrefab.cs"
 "Assets/Scripts/DayHoursPrefab.cs"
 "Assets/Scripts/ForumController.cs"
 "Assets/Scripts/ForumPostController.cs"
@@ -361,6 +358,7 @@
 "Assets/Scripts/MainMenuLanguage.cs"
 "Assets/Scripts/Message.cs"
 "Assets/Scripts/MessagePopUp.cs"
+"Assets/Scripts/Models/AvailabilityModel.cs"
 "Assets/Scripts/Models/ClassSession.cs"
 "Assets/Scripts/Models/ForumPost.cs"
 "Assets/Scripts/Models/PaymentMethod.cs"
